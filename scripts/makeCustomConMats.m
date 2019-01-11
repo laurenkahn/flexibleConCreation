@@ -9,12 +9,13 @@ DIR.conInput = '~/Desktop/flexibleConCreation/conInfo';
 DIR.conOutput = '~/Desktop/flexibleConCreation/customCons/';
 
 studyFolder = '/Volumes/research/sanlab/Studies/Incentive/';
-outputMatName = 'contrastMatrix';
+outputFilename = 'customContrasts';
 fxSuffix= '_basic'; % Change this to specify which model these contrasts are for
 
 % Specify filenames for contrast input
 defaultConMatFile = [DIR.conInput filesep 'contrastWeights' fxSuffix '.txt'];
 condsRemovedFile = [DIR.conInput filesep 'condsRemoved' fxSuffix '.txt'];
+condsAddedByRunFile = [DIR.conInput filesep 'condsAddedByRun.txt'];
 contrastNamesFile = [DIR.conInput filesep 'contrastNames' fxSuffix '.txt'];
 
 % Import sub x cond matrix specifying removed conditions 
@@ -45,7 +46,7 @@ for s=startSub:endSub
     % Adjust defaultConMat by removing columns with missing conditions
     reducedConMat = defaultConMat(:,~currentCondsRemoved);
     
-    if addTrash = 1;
+    if addTrash;
         % Initialize final contrast matrix for this sub
         finalConMat = [];
         
@@ -53,13 +54,16 @@ for s=startSub:endSub
         % etc) as necessary
         for r = 1:numRuns
             
-            % Determine how many columns remain in run r:
-            startCol = 1 + (r-1)*standardCondsPerRun;
-            endCol = r*standardCondsPerRun;
-            currentRunCondCount = sum(~currentCondsRemoved(startCol:endCol));
+            % Determine how which columns remain in run r:
+            priorColCount = sum(~currentCondsRemoved(1:standardCondsPerRun*(r-1)));
+            startCol = priorColCount + 1;
+            defaultStartCol = 1 + (r-1)*standardCondsPerRun;
+            defaultEndCol = r*standardCondsPerRun;
+            currentRunCondCount = sum(~currentCondsRemoved(defaultStartCol:defaultEndCol));
+            endCol = priorColCount + currentRunCondCount;
             
             % Grab portion of reducedConMat for run r
-            currentRunWeights = reducedConMat(:,(startCol:endCol);
+            currentRunWeights = reducedConMat(:,(startCol:endCol));
             % Append zero regressors for this run to the currentRunWeights
             addedZeroWeights = zeros(numContrasts,condsAddedByRun(s,r));
             expandedRunWeights = horzcat(currentRunWeights,addedZeroWeights);
@@ -87,5 +91,5 @@ for s=startSub:endSub
     end
     
     % Save individual subject's subConMat and contrastNames
-    save([DIR.conOutput filesep outputMatName '_sub-' placeholder num2str(s) fxSuffix '.mat'],'finalConMat','contrastCellArray','contrastNames')
+    save([DIR.conOutput filesep outputFilename '_sub-' placeholder num2str(s) fxSuffix '.mat'],'finalConMat','contrastCellArray','contrastNames')
 end
