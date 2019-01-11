@@ -12,6 +12,8 @@ studyFolder = '/Volumes/research/sanlab/Studies/Incentive/';
 outputFilename = 'customContrasts';
 analysis = 'basic'; % Change this to specify which model these contrasts are for
 task = 'template';
+% analysis = 'prepost_analysis';
+% task = 'gng';
 mkdir([DIR.conOutput filesep task filesep analysis]);
 
 % Specify filenames for contrast input

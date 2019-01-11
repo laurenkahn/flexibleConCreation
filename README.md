@@ -6,9 +6,9 @@ Specify + estimate your model.
 This requires that you already have an estimated SPM.mat that you'd like to run contrasts on.
 
 TO CREATE CONTRAST VARS:
-(1) create txt file: contrastNames_fxSuffix.txt, one contrast name per line (example in flexibleConCreation/conInfo/)
-(2) create txt file: contrastWeights_fxSuffix.txt, a matrix of weights, one contrast per line, tab delimited (example in flexibleConCreation/conInfo/)
-(3) create txt file: condsRemoved_fxSuffix.txt, a sub x cond matrix specifying missing (1) and existing (0) conditions (example in flexibleConCreation/conInfo/)
+(1) create txt file: contrastNames_analysis.txt, one contrast name per line (example in flexibleConCreation/conInfo/)
+(2) create txt file: contrastWeights_analysis.txt, a matrix of weights, one contrast per line, tab delimited (example in flexibleConCreation/conInfo/)
+(3) create txt file: condsRemoved_analysis.txt, a sub x cond matrix specifying missing (1) and existing (0) conditions (example in flexibleConCreation/conInfo/)
 (4) make contrast mats for each sub, using matlab script makeCustomConMats.m (output goes to flexibleConCreation/customCons/, but you should change that)
 
 NOTE:
