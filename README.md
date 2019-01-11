@@ -1,6 +1,10 @@
 # flexibleConCreation
 Create standard contrasts + adjust for missing conditions flexibly
 
+FIRST:
+Specify + estimate your model. 
+This requires that you already have an estimated SPM.mat that you'd like to run contrasts on.
+
 TO CREATE CONTRAST VARS:
 (1) create txt file: contrastNames_fxSuffix.txt, one contrast name per line (example in flexibleConCreation/conInfo/)
 (2) create txt file: contrastWeights_fxSuffix.txt, a matrix of weights, one contrast per line, tab delimited (example in flexibleConCreation/conInfo/)

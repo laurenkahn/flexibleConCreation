@@ -1,12 +1,14 @@
 numCons=23
 templateDir=~/Desktop/flexibleConCreation/spmFiles/templates/
 templateScriptFilename=INC001_basic_runCon999.m
+fxSuffix=_basic
 
 cd $templateDir
+mkdir ../runCons$fxSuffix
 
-for con in {1..$numCons}
+for con in $(seq 1 ${numCons})
 do
 
-sed -e 's/999/'${con}'/g' ${templateScriptFilename} > ${templateScriptFilename:0:$((${#templateScriptFilename}-5))}${con}.m
+sed -e 's/999/'${con}'/g' ${templateScriptFilename} > ../runCons${fxSuffix}/${templateScriptFilename:0:$((${#templateScriptFilename}-5))}${con}.m
 
 done
