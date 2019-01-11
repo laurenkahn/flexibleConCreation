@@ -12,12 +12,15 @@ studyFolder = '/Volumes/research/sanlab/Studies/Incentive/';
 outputFilename = 'customContrasts';
 analysis = 'basic'; % Change this to specify which model these contrasts are for
 task = 'template';
+% analysis = 'prepost_analysis';
+% task = 'gng';
+mkdir([DIR.conOutput filesep task filesep analysis]);
 
 % Specify filenames for contrast input
 defaultConMatFile = [DIR.conInput filesep 'contrastWeights_' task '_' analysis '.txt'];
 condsRemovedFile = [DIR.conInput filesep 'condsRemoved_' task '_' analysis '.txt'];
 condsAddedByRunFile = [DIR.conInput filesep 'condsAddedByRun.txt'];
-contrastNamesFile = [DIR.conInput filesep 'contrastNames_' task fxSuffix '.txt'];
+contrastNamesFile = [DIR.conInput filesep 'contrastNames_' task '_' analysis '.txt'];
 
 % Import sub x cond matrix specifying removed conditions 
 condsRemoved = dlmread(condsRemovedFile,'\t'); 
@@ -75,6 +78,8 @@ for s=startSub:endSub
     else
         finalConMat = reducedConMat;
     end
+    
+    %
     
     % Create cell array with one contrast per cell
     contrastCellArray = mat2cell(finalConMat,ones(1,numContrasts),size(finalConMat,2));
