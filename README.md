@@ -17,7 +17,7 @@ NOTE:
 - Then, we can use the N contrasts created to make a script for a template sub.
 - Finally, we replicate across subs as we usually would.
 
-MAKE TEMPLATE FOR SUB 1, CON999:
+MAKE CONTRAST TEMPLATE FOR SUB 1, CON999:
 - An example is in spmFiles/templates/
 - Should have index 999 at the end of the filename
 - It will use "load matlab variables" and "access matlab variables" modules.
@@ -26,9 +26,10 @@ MAKE TEMPLATE FOR SUB 1, CON999:
 (2) Update the path for the SPM.mat that was created from your model specification/estimation for that subject
 
 CREATE TEMPLATE FOR SUB 1:
-- Replicate this script for contrasts 1 through N using the bash code in the .txt file (it's really primitive and uses "sed" to replace contrast numbers, but it works!)
+- Replicate the contrast template script you just made, for contrasts 1 through N, using the bash code in the .txt file 
+- It's really primitive and uses "sed" to replace contrast numbers, but it works!
 - Just copy and paste the code from scripts/replicateConJobs.txt into the terminal, + it'll be nearly instantaneous
-- You should now have N contrast scripts, for contrasts 1 thru N, for subject 1.
+- You should now have N contrast scripts, for contrasts 1 thru N, for subject 1
 - Load these N contrast scripts into batch editor (in order), and save the whole thing as a .mat
 
 REPLICATE FOR ALL SUBS:
