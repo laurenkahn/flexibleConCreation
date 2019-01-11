@@ -11,12 +11,13 @@ DIR.conOutput = '~/Desktop/flexibleConCreation/customCons/';
 studyFolder = '/Volumes/research/sanlab/Studies/Incentive/';
 outputFilename = 'customContrasts';
 fxSuffix= '_basic'; % Change this to specify which model these contrasts are for
+task = 'template';
 
 % Specify filenames for contrast input
-defaultConMatFile = [DIR.conInput filesep 'contrastWeights' fxSuffix '.txt'];
-condsRemovedFile = [DIR.conInput filesep 'condsRemoved' fxSuffix '.txt'];
+defaultConMatFile = [DIR.conInput filesep 'contrastWeights_' task fxSuffix '.txt'];
+condsRemovedFile = [DIR.conInput filesep 'condsRemoved_' task fxSuffix '.txt'];
 condsAddedByRunFile = [DIR.conInput filesep 'condsAddedByRun.txt'];
-contrastNamesFile = [DIR.conInput filesep 'contrastNames' fxSuffix '.txt'];
+contrastNamesFile = [DIR.conInput filesep 'contrastNames_' task fxSuffix '.txt'];
 
 % Import sub x cond matrix specifying removed conditions 
 condsRemoved = dlmread(condsRemovedFile,'\t'); 
