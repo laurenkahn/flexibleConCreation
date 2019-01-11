@@ -1,8 +1,7 @@
 %-----------------------------------------------------------------------
 % Job configuration created by cfg_util (rev $Rev: 3944 $)
 %-----------------------------------------------------------------------
-% EDIT THIS: Point to the customContrast .mat for this subject:
-matlabbatch{1}.cfg_basicio.load_vars.matname = {'~/Desktop/flexibleConCreation/customCons/template/basic/customContrasts_sub-001_template_basic.mat/'};
+matlabbatch{1}.cfg_basicio.load_vars.matname = {'~/Desktop/flexibleConCreation/customCons/template/basic/customContrasts_sub-001_template_basic.mat'};
 matlabbatch{1}.cfg_basicio.load_vars.loadvars.varname = {
     'contrastNames'
     'contrastCellArray'
@@ -27,7 +26,6 @@ matlabbatch{3}.cfg_basicio.subsrefvar.input(1).src_output = substruct('{}',{2});
 matlabbatch{3}.cfg_basicio.subsrefvar.subsreference{1}.subsindc = {999};
 matlabbatch{3}.cfg_basicio.subsrefvar.tgt_spec.e{1}.name = 'strtype';
 matlabbatch{3}.cfg_basicio.subsrefvar.tgt_spec.e{1}.value = 'e';
-% EDIT THIS: Point to the SPM.mat from your estimated model for this subject:
 matlabbatch{4}.spm.stats.con.spmmat = {'/vxfsvol/home/research/sanlab/Studies/Incentive/subjects/INC001/fx/fx_quick4SAN/SPM.mat'};
 matlabbatch{4}.spm.stats.con.consess{1}.tcon.name(1) = cfg_dep;
 matlabbatch{4}.spm.stats.con.consess{1}.tcon.name(1).tname = 'Name';

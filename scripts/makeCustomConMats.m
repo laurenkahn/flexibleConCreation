@@ -93,7 +93,6 @@ for s=startSub:endSub
         if negSum > 0
             currentCon(isNeg) = currentCon(isNeg)/negSum;
         end
-        currentCon
         finalConMat(con,:) = currentCon;
     end
     
