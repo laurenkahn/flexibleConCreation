@@ -25,7 +25,7 @@ MAKE TEMPLATE FOR SUB 1, CON999:
 (1) Update the path to the customContrasts .mat file for that subject
 (2) Update the path for the SPM.mat that was created from your model specification/estimation for that subject
 
-REPLICATE FOR ALL CONS, for SUB 1:
+CREATE TEMPLATE FOR SUB 1:
 - Replicate this script for contrasts 1 through N using the bash code in the .txt file (it's really primitive and uses "sed" to replace contrast numbers, but it works!)
 - Just copy and paste the code from scripts/replicateConJobs.txt into the terminal, + it'll be nearly instantaneous
 - You should now have N contrast scripts, for contrasts 1 thru N, for subject 1.
