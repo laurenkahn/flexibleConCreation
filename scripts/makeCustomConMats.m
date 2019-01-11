@@ -1,7 +1,7 @@
 startSub=1;
 endSub=26; 
 numRuns = 5; % Adjust as nec
-standardCondsPerRun = 8;
+standardCondsPerRun = 4; % In the example, correct go, correct stop, failed stop, + cue
 leadingZeros = 1; % Set this to 0 if you don't want leading 0s in your sub numbers (e.g. sub-004)
 addTrash = 0; % Change this to 1 if you want to add variable # of extra trash regressors per run, per sub
 
@@ -10,7 +10,7 @@ DIR.conOutput = '~/Desktop/flexibleConCreation/customCons/';
 
 studyFolder = '/Volumes/research/sanlab/Studies/Incentive/';
 outputMatName = 'contrastMatrix';
-fxSuffix= '_ppi_addl_20141101'; % Change this to specify which model these contrasts are for
+fxSuffix= '_basic'; % Change this to specify which model these contrasts are for
 
 % Specify filenames for contrast input
 defaultConMatFile = [DIR.conInput filesep 'contrastWeights' fxSuffix '.txt'];
