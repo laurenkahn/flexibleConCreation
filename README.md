@@ -18,9 +18,17 @@ Then, we can use the N contrasts created to make a script for a template sub.
 Finally, we replicate across subs as we usually would.
 
 MAKE TEMPLATE FOR SUB 1, CON999:
-- make batch template for con999 for subject1 (use index 999 at end of filename). 
-- Use "load matlab variables" and "access matlab variables" modules.
+- Should have index 999 at the end of the filename
+- It will use "load matlab variables" and "access matlab variables" modules.
+- An example is in spmFiles/templates/
+- Update the path to the customContrasts .mat file for that subject
+- Update the path for the SPM.mat that was created from your model specification/estimation for that subject
 
-REPLICATE FOR ALL CONS & ALL SUBS:
-- Replicate this for contrasts 1 through N using the bash script (it's really primitive and uses "sed" to replace contrast numbers, but it works!)
-- Load N contrasts into batch editor, save as .mat, and use spmbatch.m to replicate for all subjects as usual
+REPLICATE FOR ALL CONS, for SUB 1:
+- Replicate this for contrasts 1 through N using the bash code (it's really primitive and uses "sed" to replace contrast numbers, but it works!)
+- Just copy and paste the code into the terminal, + it'll be nearly instantaneous
+- You should now have N contrast scripts, for contrasts 1 thru N, for subject 1.
+- Load these N contrast scripts into batch editor, and save the whole thing as a .mat
+
+REPLICATE FOR ALL SUBS:
+- Use spmbatch.m to replicate for all subjects as usual
