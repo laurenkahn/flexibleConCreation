@@ -17,7 +17,7 @@ task = 'template';
 defaultConMatFile = [DIR.conInput filesep 'contrastWeights_' task '_' analysis '.txt'];
 condsRemovedFile = [DIR.conInput filesep 'condsRemoved_' task '_' analysis '.txt'];
 condsAddedByRunFile = [DIR.conInput filesep 'condsAddedByRun.txt'];
-contrastNamesFile = [DIR.conInput filesep 'contrastNames_' task '_' analysis '.txt'];
+contrastNamesFile = [DIR.conInput filesep 'contrastNames_' task fxSuffix '.txt'];
 
 % Import sub x cond matrix specifying removed conditions 
 condsRemoved = dlmread(condsRemovedFile,'\t'); 
