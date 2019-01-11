@@ -1,0 +1,12 @@
+numCons=23
+templateDir=~/Desktop/flexibleConCreation/spmFiles/templates/
+templateScriptFilename=INC001_basic_runCon999.m
+
+cd $templateDir
+
+for con in {1..$numCons}
+do
+
+sed -e 's/999/'${con}'/g' ${templateScriptFilename} > ${templateScriptFilename:0:$((${#templateScriptFilename}-5))}${con}.m
+
+done
