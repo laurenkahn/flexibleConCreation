@@ -46,6 +46,7 @@ for s=startSub:endSub
     
     % Extract current sub's removed conditions
     currentCondsRemoved = condsRemoved(s,:);
+    currentCondsRemoved(isnan(currentCondsRemoved))=1;
     
     % Adjust defaultConMat by removing columns with missing conditions
     reducedConMat = defaultConMat(:,~currentCondsRemoved);

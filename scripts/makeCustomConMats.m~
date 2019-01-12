@@ -1,6 +1,6 @@
 startSub=1;
 endSub=26; 
-numRuns = 5; % Adjust as nec
+nRuns = 5; % Adjust as nec
 standardCondsPerRun = 4; % In the example, correct go, correct stop, failed stop, + cue
 leadingZeros = 1; % Set this to 0 if you don't want leading 0s in your sub numbers (e.g. sub-004)
 addTrash = 0; % Change this to 1 if you want to add variable # of extra trash regressors per run, per sub
@@ -32,12 +32,12 @@ end
 
 % Import default contrast matrix
 defaultConMat = dlmread(defaultConMatFile,'\t');
-numContrasts = size(defaultConMat,1);
+nContrasts = size(defaultConMat,1);
 
 % Generate cell array of contrast names
-contrastNames = cell(1,numContrasts);
+contrastNames = cell(1,nContrasts);
 fid=fopen(contrastNamesFile);
-for c=1:numContrasts
+for c=1:nContrasts
     contrastNames{c} = fgets(fid);
 end
 fclose(fid);
@@ -46,7 +46,7 @@ for s=startSub:endSub
     
     % Extract current sub's removed conditions
     currentCondsRemoved = condsRemoved(s,:);
-    
+    currentCondsRemoved(isnan(currentCondsRemoved))=1;
     % Adjust defaultConMat by removing columns with missing conditions
     reducedConMat = defaultConMat(:,~currentCondsRemoved);
     
@@ -56,7 +56,7 @@ for s=startSub:endSub
         
         % Starting from reducedConMat, add extra regressors (trash, motion,
         % etc) as necessary
-        for r = 1:numRuns
+        for r = 1:nRuns
             
             % Determine how which columns remain in run r:
             priorColCount = sum(~currentCondsRemoved(1:standardCondsPerRun*(r-1)));
@@ -69,7 +69,7 @@ for s=startSub:endSub
             % Grab portion of reducedConMat for run r
             currentRunWeights = reducedConMat(:,(startCol:endCol));
             % Append zero regressors for this run to the currentRunWeights
-            addedZeroWeights = zeros(numContrasts,condsAddedByRun(s,r));
+            addedZeroWeights = zeros(nContrasts,condsAddedByRun(s,r));
             expandedRunWeights = horzcat(currentRunWeights,addedZeroWeights);
             % Add this run to the final contrast matrix
             
@@ -79,10 +79,25 @@ for s=startSub:endSub
         finalConMat = reducedConMat;
     end
     
-    %
+    % Scale appropriately for missing conditions
+    for con = 1:nContrasts
+        currentCon = finalConMat(con,:);
+        isPos = currentCon>0;
+        isNeg = currentCon<0;
+        posSum = sum(currentCon(isPos));
+        negSum = abs(sum(currentCon(isNeg))); % Makes neg sum is POS so that it simply scales and does not flip sign!
+        
+        % Scale positive side
+        currentCon(isPos) = currentCon(isPos)/posSum;
+        % Scale negative side, if it exists (won't for >Rest contrasts)
+        if negSum > 0
+            currentCon(isNeg) = currentCon(isNeg)/negSum;
+        end
+        finalConMat(con,:) = currentCon;
+    end
     
     % Create cell array with one contrast per cell
-    contrastCellArray = mat2cell(finalConMat,ones(1,numContrasts),size(finalConMat,2));
+    contrastCellArray = mat2cell(finalConMat,ones(1,nContrasts),size(finalConMat,2));
     
     % DO CUSTOM CONTRAST NAMES NEED TO BE CREATED TOO?? 
     
