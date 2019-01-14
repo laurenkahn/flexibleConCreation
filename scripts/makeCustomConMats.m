@@ -1,13 +1,17 @@
+% Subject info
 startSub=1;
-endSub=26; 
+endSub=26;
+nSubs = endSub - startSub + 1;
+leadingZeros = 1; % Set this to 0 if you don't want leading 0s in your sub numbers (e.g. sub-004)
+
+% Run info
 nRuns = 5; % Adjust as nec
 standardCondsPerRun = 4; % In the example, correct go, correct stop, failed stop, + cue
-leadingZeros = 1; % Set this to 0 if you don't want leading 0s in your sub numbers (e.g. sub-004)
+
+% Adding trash by condition or run
+nCondTrash = 5; % Change to 0 if no trash per cond (common cond trash: time derivatives)
+nRunTrash = 1; % Change to 0 if no trash per run (common run trash: motion)
 addCustomTrash = 0; % Change this to 1 if you want to add variable # of extra trash regressors per run, per sub
-addStandardTrash = 1;
-nTrashPerCond = 1; % Change to 0 if no trash per cond (common cond trash: time derivatives)
-nTrashPerRun = 3; % Change to 0 if no trash per run (common run trash: motion)
-nSubs = endSub - startSub + 1;
 
 condsPerRun_wCondTrash = standardCondsPerRun + nCondTrash;
 standardNCols = nRuns*standardCondsPerRun;
@@ -29,12 +33,12 @@ condsRemovedFile = [DIR.conInput filesep 'condsRemoved_' task '_' analysis '.txt
 condsAddedByRunFile = [DIR.conInput filesep 'condsAddedByRun.txt'];
 contrastNamesFile = [DIR.conInput filesep 'contrastNames_' task '_' analysis '.txt'];
 
-% Import sub x cond matrix specifying removed conditions 
-condsRemoved = dlmread(condsRemovedFile,'\t'); 
+% Import sub x cond matrix specifying removed conditions
+condsRemoved = dlmread(condsRemovedFile,'\t');
 
 if addCustomTrash
-    % Import sub x run matrix specifying how many trash regressors to add per run 
-    condsAddedByRun = dlmread(condsAddedByRunFile,'\t'); 
+    % Import sub x run matrix specifying how many trash regressors to add per run
+    condsAddedByRun = dlmread(condsAddedByRunFile,'\t');
 end
 
 % Import default contrast matrix
@@ -62,39 +66,41 @@ for s=startSub:endSub
     currentCondsRemoved = condsRemoved(s,:);
     currentCondsRemoved(isnan(currentCondsRemoved))=1; % change NaN to 1 (=removed)
     
-    % Expand the currentCondsRemoved variable to include standard trash
-    if addStandardTrash
-        
-        if nStandardCondTrash > 0 %If you want to intersperse trash after each condition:
-            currentCondsRemoved_addCondTrash = nan(length(currentCondsRemoved)*(nTrashPerCond+1));
-            currentCondsRemoved_addCondTrash(1:(nTrashPerCond+1):end) = currentCondsRemoved;
-            for i = 1:nStandardCondTrash 
-                % We use currentCondsRemoved to intersperse, so that we remove a trash
-                % condition associated with a removed condition, but retain
-                % a trash condition associated with a retained condition:
-                currentCondsRemoved_addCondTrash((1+i):(nTrashPerCond+1):end) = currentCondsRemoved; 
-            end
-            currentCondsRemoved = currentCondsRemoved_addCondTrash;
-        end
-        
-        if nStandardRunTrash > 0
-            currentCondsRemoved_addRunTrash = [];
-            for r=1:nRuns
-                startCol = 1 + (r-1)*condsPerRun_wCondTrash;
-                endCol = r*condsPerRun_wCondTrash;
-                % If all run entries are 1 (run removed), this will fail.
-                runEntries = currentCondsRemoved(startCol:endCol);
-                runRetained = find(~runEntries); % find a 0 entry in this run (a retained condition)
-                if runRetained
-                    currentCondsRemoved_addRunTrash = horzcat(currentCondsRemoved_addRunTrash,currentCondsRemoved(startCol:endCol),zeros(1,nRunTrash));
-                else
-                    currentCondsRemoved_addRunTrash = horzcat(currentCondsRemoved_addRunTrash,currentCondsRemoved(startCol:endCol),ones(1,nRunTrash));
-                end
-            end
-            currentCondsRemoved = currentCondsRemoved_addRunTrash;
-        end
+    % Expand the currentCondsRemoved variable to include cond trash
     
+    if nCondTrash > 0 %If you want to intersperse trash after each condition:
+        currentCondsRemoved_addCondTrash = nan(1,length(currentCondsRemoved)*(nCondTrash+1));
+        currentCondsRemoved_addCondTrash(1:(nCondTrash+1):end) = currentCondsRemoved;
+        for i = 1:nCondTrash
+            % We use currentCondsRemoved to intersperse, so that we remove a trash
+            % condition associated with a removed condition, but retain
+            % a trash condition associated with a retained condition:
+            currentCondsRemoved_addCondTrash((1+i):(nCondTrash+1):end) = currentCondsRemoved;
+        end
+        currentCondsRemoved = currentCondsRemoved_addCondTrash;
     end
+    
+    % Expand the currentCondsRemoved variable to include run trash
+    if nRunTrash > 0
+        currentCondsRemoved_addRunTrash = [];
+        for r=1:nRuns
+            startCol = 1 + (r-1)*condsPerRun_wCondTrash;
+            endCol = r*condsPerRun_wCondTrash;
+            
+            % Add nRunTrash 0s to retain trash for runs retained
+            % Add nRunTrash 1s to remove trash for runs removed
+            % First determine whether a run is retained:
+            runEntries = currentCondsRemoved(startCol:endCol);
+            runRetained = find(~runEntries); % is TRUE if you find a 0 entry in this run (a retained condition); if not, FALSE
+            if runRetained
+                currentCondsRemoved_addRunTrash = horzcat(currentCondsRemoved_addRunTrash,currentCondsRemoved(startCol:endCol),zeros(1,nRunTrash));
+            else
+                currentCondsRemoved_addRunTrash = horzcat(currentCondsRemoved_addRunTrash,currentCondsRemoved(startCol:endCol),ones(1,nRunTrash));
+            end
+        end
+        currentCondsRemoved = currentCondsRemoved_addRunTrash;
+    end
+    
     
     % Reduce defaultConMat by removing columns with missing conditions
     reducedConMat = defaultConMat(:,~currentCondsRemoved);
@@ -147,8 +153,6 @@ for s=startSub:endSub
     
     % Create cell array with one contrast per cell
     contrastCellArray = mat2cell(finalConMat,ones(1,nContrasts),size(finalConMat,2));
-    
-    % DO CUSTOM CONTRAST NAMES NEED TO BE CREATED TOO?? 
     
     if leadingZeros
         if s<10
