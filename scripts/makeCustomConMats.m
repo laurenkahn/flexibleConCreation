@@ -3,7 +3,14 @@ endSub=26;
 nRuns = 5; % Adjust as nec
 standardCondsPerRun = 4; % In the example, correct go, correct stop, failed stop, + cue
 leadingZeros = 1; % Set this to 0 if you don't want leading 0s in your sub numbers (e.g. sub-004)
-addTrash = 0; % Change this to 1 if you want to add variable # of extra trash regressors per run, per sub
+addCustomTrash = 0; % Change this to 1 if you want to add variable # of extra trash regressors per run, per sub
+addStandardTrash = 1;
+nTrashPerCond = 1; % Change to 0 if no trash per cond (common cond trash: time derivatives)
+nTrashPerRun = 3; % Change to 0 if no trash per run (common run trash: motion)
+nSubs = endSub - startSub + 1;
+
+condsPerRun_wCondTrash = standardCondsPerRun + nCondTrash;
+standardNCols = nRuns*standardCondsPerRun;
 
 DIR.conInput = '~/Desktop/flexibleConCreation/conInfo';
 DIR.conOutput = '~/Desktop/flexibleConCreation/customCons/';
@@ -25,7 +32,7 @@ contrastNamesFile = [DIR.conInput filesep 'contrastNames_' task '_' analysis '.t
 % Import sub x cond matrix specifying removed conditions 
 condsRemoved = dlmread(condsRemovedFile,'\t'); 
 
-if addTrash
+if addCustomTrash
     % Import sub x run matrix specifying how many trash regressors to add per run 
     condsAddedByRun = dlmread(condsAddedByRunFile,'\t'); 
 end
@@ -42,16 +49,57 @@ for c=1:nContrasts
 end
 fclose(fid);
 
+% FOR EACH SUBJECT:
+% (1) Extract their row of condsRemoved
+% (2a) Adjust it based on condTrash (intersperse to indicate trash conditions following each condition)
+% (2b) Adjust it based on runTrash (add sets of 1s following each run)
+% (3a) Use it to reduce their imported defaultConMat, which will include cond + run trash.
+% (3b) Optional: adjust reducedConMat based on custom trash per run, per person.
+
 for s=startSub:endSub
     
-    % Extract current sub's removed conditions
+    % Extract current sub's removed conditions (one row of condsRemoved)
     currentCondsRemoved = condsRemoved(s,:);
-    currentCondsRemoved(isnan(currentCondsRemoved))=1;
+    currentCondsRemoved(isnan(currentCondsRemoved))=1; % change NaN to 1 (=removed)
     
-    % Adjust defaultConMat by removing columns with missing conditions
+    % Expand the currentCondsRemoved variable to include standard trash
+    if addStandardTrash
+        
+        if nStandardCondTrash > 0 %If you want to intersperse trash after each condition:
+            currentCondsRemoved_addCondTrash = nan(length(currentCondsRemoved)*(nTrashPerCond+1));
+            currentCondsRemoved_addCondTrash(1:(nTrashPerCond+1):end) = currentCondsRemoved;
+            for i = 1:nStandardCondTrash 
+                % We use currentCondsRemoved to intersperse, so that we remove a trash
+                % condition associated with a removed condition, but retain
+                % a trash condition associated with a retained condition:
+                currentCondsRemoved_addCondTrash((1+i):(nTrashPerCond+1):end) = currentCondsRemoved; 
+            end
+            currentCondsRemoved = currentCondsRemoved_addCondTrash;
+        end
+        
+        if nStandardRunTrash > 0
+            currentCondsRemoved_addRunTrash = [];
+            for r=1:nRuns
+                startCol = 1 + (r-1)*condsPerRun_wCondTrash;
+                endCol = r*condsPerRun_wCondTrash;
+                % If all run entries are 1 (run removed), this will fail.
+                runEntries = currentCondsRemoved(startCol:endCol);
+                runRetained = find(~runEntries); % find a 0 entry in this run (a retained condition)
+                if runRetained
+                    currentCondsRemoved_addRunTrash = horzcat(currentCondsRemoved_addRunTrash,currentCondsRemoved(startCol:endCol),zeros(1,nRunTrash));
+                else
+                    currentCondsRemoved_addRunTrash = horzcat(currentCondsRemoved_addRunTrash,currentCondsRemoved(startCol:endCol),ones(1,nRunTrash));
+                end
+            end
+            currentCondsRemoved = currentCondsRemoved_addRunTrash;
+        end
+    
+    end
+    
+    % Reduce defaultConMat by removing columns with missing conditions
     reducedConMat = defaultConMat(:,~currentCondsRemoved);
     
-    if addTrash;
+    if addCustomTrash;
         % Initialize final contrast matrix for this sub
         finalConMat = [];
         

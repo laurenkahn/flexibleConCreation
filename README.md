@@ -11,6 +11,14 @@ TO CREATE CONTRAST VARS:
 - (3) create txt file: condsRemoved_analysis.txt, a sub x cond matrix specifying missing (1) and existing (0) conditions (example in flexibleConCreation/conInfo/)
 - (4) make contrast mats for each sub, using matlab script scripts/makeCustomConMats.m (output goes to flexibleConCreation/customCons/, but you should change that)
 
+
+STOP!
+- You might want to check whether your output files look as they should. You can do this by loading the customContrast .mats into the Matlab workspace, and then comparing the variable "finalConMat" to your original contrastWeights txt file.
+- Find a subject who has no missing conditions across any run. Their finalConMat variable should be identical to your text file.
+- Find a subject who has at least one missing condition. Their finalConMat variable should be similar to the text file, with the missing columns removed.
+- Find a contrast that includes a nonzero number in one of the missing conditions. The weights should have been rescaled appropriately so that all positive numbers add to 1, and all negative numbers add to 1 (check this).
+
+
 NOTE:
 - Normally we create a template script for a template subject, and replicate it across subs.
 - In this case, we'll first make a template script for a single contrast (for sub 1), and then replicate it across CONTRASTS.
