@@ -5,13 +5,13 @@ nSubs = endSub - startSub + 1;
 leadingZeros = 1; % Set this to 0 if you don't want leading 0s in your sub numbers (e.g. sub-004)
 
 % Run info
-nRuns = 5; % Adjust as nec
-standardCondsPerRun = 4; % In the example, correct go, correct stop, failed stop, + cue
+nRuns = 4; % Adjust as nec
+standardCondsPerRun = 9; % In the example, correct go, correct stop, failed stop, + cue
 
 % Adding trash by condition or run
 nCondTrash = 1; % Change to 0 if no trash per cond (common cond trash: time derivatives)
 nRunTrash = 5; % Change to 0 if no trash per run (common run trash: motion)
-addCustomTrash = 0; % Change this to 1 if you want to add variable # of extra trash regressors per run, per sub
+addCustomTrash = 0; % USUALLY 0; Change this to 1 if you want to add variable # of extra trash regressors per run, per sub
 
 condsPerRun_wCondTrash = standardCondsPerRun*(nCondTrash+1);
 standardNCols = nRuns*standardCondsPerRun;
@@ -24,10 +24,10 @@ DIR.conInput = '~/Desktop/flexibleConCreation/conInfo';
 DIR.conOutput = '~/Desktop/flexibleConCreation/customCons/';
 
 outputFilename = 'customContrasts';
-analysis = 'basic'; % Change this to specify which model these contrasts are for
-task = 'template'; % Change this to your task name (part of input filenames)
-% analysis = 'prepost_analysis';
-% task = 'gng';
+% analysis = 'basic'; % Change this to specify which model these contrasts are for
+% task = 'template'; % Change this to your task name (part of input filenames)
+analysis = 'prepost_analysis';
+task = 'gng';
 
 mkdir([DIR.conOutput filesep task filesep analysis]);
 

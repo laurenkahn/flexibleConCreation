@@ -18,7 +18,6 @@ STOP!
 - Find a subject who has at least one missing condition. Their finalConMat variable should be similar to the text file, with the missing columns removed.
 - Find a contrast that includes a nonzero number in one of the missing conditions. The weights should have been rescaled appropriately so that all positive numbers add to 1, and all negative numbers add to 1 (check this).
 
-
 NOTE:
 - Normally we create a template script for a template subject, and replicate it across subs.
 - In this case, we'll first make a template script for a single contrast (for sub 1), and then replicate it across CONTRASTS.
