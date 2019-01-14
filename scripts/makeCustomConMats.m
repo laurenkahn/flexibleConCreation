@@ -16,15 +16,19 @@ addCustomTrash = 0; % Change this to 1 if you want to add variable # of extra tr
 condsPerRun_wCondTrash = standardCondsPerRun*(nCondTrash+1);
 standardNCols = nRuns*standardCondsPerRun;
 
-DIR.conInput = '~/Desktop/flexibleConCreation/conInfo';
+% Change this to the folder where your condsRemoved (output from makeVecs), contrastNames, and
+% contrastWeights files live:
+DIR.conInput = '~/Desktop/flexibleConCreation/conInfo'; 
+% Change this to the folder where you want your custom contrast output
+% files to live:
 DIR.conOutput = '~/Desktop/flexibleConCreation/customCons/';
 
-studyFolder = '/Volumes/research/sanlab/Studies/Incentive/';
 outputFilename = 'customContrasts';
 analysis = 'basic'; % Change this to specify which model these contrasts are for
-task = 'template';
+task = 'template'; % Change this to your task name (part of input filenames)
 % analysis = 'prepost_analysis';
 % task = 'gng';
+
 mkdir([DIR.conOutput filesep task filesep analysis]);
 
 % Specify filenames for contrast input
