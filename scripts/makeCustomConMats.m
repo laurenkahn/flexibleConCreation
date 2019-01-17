@@ -4,9 +4,9 @@ endSub=144;
 nSubs = endSub - startSub + 1;
 leadingZeros = 1; % Set this to 0 if you don't want leading 0s in your sub numbers (e.g. sub-004)
 
-% Run info
-nRuns = 4; % Adjust as nec
-standardCondsPerRun = 9; % In the example, correct go, correct stop, failed stop, + cue
+% Run info - ADJUST FOR EACH TASK
+nRuns = 4; 
+standardCondsPerRun = 5; % 9 for gng, 5 for sst
 
 % Adding trash by condition or run
 nCondTrash = 1; % Change to 0 if no trash per cond (common cond trash: time derivatives)
@@ -27,7 +27,7 @@ outputFilename = 'customContrasts';
 % analysis = 'basic'; % Change this to specify which model these contrasts are for
 % task = 'template'; % Change this to your task name (part of input filenames)
 analysis = 'prepost_analysis';
-task = 'gng';
+task = 'sst';
 
 mkdir([DIR.conOutput filesep task filesep analysis]);
 

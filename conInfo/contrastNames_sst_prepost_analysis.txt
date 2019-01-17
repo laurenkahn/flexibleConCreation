@@ -1,0 +1,10 @@
+1_CorrectStop>CorrectGo
+2_CorrectStop>IncorrectStop
+3_AnyStop>Baseline
+4_CorrectGo>Baseline
+5_AnyStop>CorrectGo
+6_T2(CorrectStop>CorrectGo)>T1(CorrectStop>CorrectGo)
+7_T2(CorrectStop>IncorrectStop)>T1(CorrectStop>IncorrectStop)
+8_T2(AnyStop>CorrectGo)>T1(AnyStop>CorrectGo)
+9_T2(Correct Stop)>T1(Correct Stop)
+10_T2(Any Stop)>T1(Any Stop)
