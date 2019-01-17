@@ -18,7 +18,8 @@ standardNCols = nRuns*standardCondsPerRun;
 
 % Change this to the folder where your condsRemoved (output from makeVecs), contrastNames, and
 % contrastWeights files live:
-DIR.conInput = '~/Desktop/flexibleConCreation/conInfo'; 
+DIR.conInput = '~/Desktop/flexibleConCreation/conInfo/';
+DIR.condsRemoved = '~/Desktop/REV_BxData/info/';
 % Change this to the folder where you want your custom contrast output
 % files to live:
 DIR.conOutput = '~/Desktop/flexibleConCreation/customCons/';
@@ -33,9 +34,11 @@ mkdir([DIR.conOutput filesep task filesep analysis]);
 
 % Specify filenames for contrast input
 defaultConMatFile = [DIR.conInput filesep 'contrastWeights_' task '_' analysis '.txt'];
-condsRemovedFile = [DIR.conInput filesep 'condsRemoved_' task '_' analysis '.txt'];
-condsAddedByRunFile = [DIR.conInput filesep 'condsAddedByRun.txt'];
 contrastNamesFile = [DIR.conInput filesep 'contrastNames_' task '_' analysis '.txt'];
+condsRemovedFile = [DIR.condsRemoved filesep 'condsRemoved_' task '_' analysis '.txt'];
+if addCustomTrash
+    condsAddedByRunFile = [DIR.condsRemoved filesep 'condsAddedByRun.txt']; % usually won't exist
+end
 
 % Import sub x cond matrix specifying removed conditions
 condsRemoved = dlmread(condsRemovedFile,'\t');
