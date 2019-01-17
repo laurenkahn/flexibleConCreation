@@ -1,6 +1,6 @@
 % Subject info
 startSub=1;
-endSub=26;
+endSub=144;
 nSubs = endSub - startSub + 1;
 leadingZeros = 1; % Set this to 0 if you don't want leading 0s in your sub numbers (e.g. sub-004)
 
